@@ -1,0 +1,700 @@
+{
+  "name": "AI Career Accelerator Lead Handling",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6728d7de-61a9-44a8-8f83-265574db4938",
+      "name": "Receive Student Lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f07e989-905c-40a2-ab08-92f89e63c095",
+              "name": "Name",
+              "value": "Sample Student",
+              "type": "string"
+            },
+            {
+              "id": "be78dcff-a4d2-4d87-9ee8-b97f0f3da5c9",
+              "name": "Email",
+              "value": "student@example.com",
+              "type": "string"
+            },
+            {
+              "id": "dfa5d54a-2f0a-4dcb-8ee9-11f076a844e9",
+              "name": "Interest",
+              "value": "Highly Interested",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "d44bd9a1-f4ff-4e24-aecc-61853ecce3b3",
+      "name": "Prepare Student Data"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_GOOGLE_SHEET_NAME"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "YOUR_SHEET_TAB"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{$json.Name}}",
+            "Email": "={{$json.Email}}",
+            "Interest": "={{$json.Interest}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest",
+              "displayName": "Interest",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response Sent",
+              "displayName": "Response Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        0
+      ],
+      "id": "9e1eca53-0db3-4c13-b2e0-7299c45b3db6",
+      "name": "Store Lead in Google Sheets"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.Interest}}",
+                    "rightValue": "Highly Interested",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f70a9fa1-c6cf-4ef5-8731-68ee1f8a5bd1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "7245568c-ce7d-49ea-b4ce-ac944191fc8a",
+                    "leftValue": "={{$json.Interest}}",
+                    "rightValue": "Exploring",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "093c5561-30cf-4ce1-8658-876a3d7cffb2",
+                    "leftValue": "={{$json.Interest}}",
+                    "rightValue": "Just Curious",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        -16
+      ],
+      "id": "cd887a03-96d3-49d0-9f4c-60e2118f02fe",
+      "name": "Classify Lead Interest"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8df73e14-9fad-40b8-bbff-d647f12bd0d1",
+              "name": "Response Type",
+              "value": "Highly Interested",
+              "type": "string"
+            },
+            {
+              "id": "37932b2e-e7eb-4c0c-a081-fbebe4a000a9",
+              "name": "Email Subject",
+              "value": "Your AI Career Accelerator journey starts here",
+              "type": "string"
+            },
+            {
+              "id": "f8bedf5b-ca50-4278-bcd0-1d9bbfc83489",
+              "name": "Email Body",
+              "value": "Hi {{student name}}, thanks for your interest in the AI Career Accelerator. The program is designed to help you build AI-powered portfolio work, develop practical system-building skills, and prepare for internships and placements.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        896,
+        -144
+      ],
+      "id": "3f84c46b-e67f-4ff2-bbff-d38a09d8432b",
+      "name": "Prepare Highly Interested Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e37cd30-59a9-4c0d-bd37-ba560ac477c8",
+              "name": "Response Type",
+              "value": "Exploring",
+              "type": "string"
+            },
+            {
+              "id": "ee0266f2-8260-4086-ab8c-000967cfd567",
+              "name": "Email Subject",
+              "value": "Explore the AI Career Accelerator",
+              "type": "string"
+            },
+            {
+              "id": "e0328c96-4ed0-409b-8316-7f4da8a33a2d",
+              "name": "Email Body",
+              "value": "Hi {{student name}}, thanks for exploring the AI Career Accelerator. The program is designed to help you build AI-powered portfolio work, develop practical system-building skills, and prepare for internships and placements.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        896,
+        48
+      ],
+      "id": "59a29de2-e29b-4a5a-b584-7cce2da07116",
+      "name": "Prepare Exploring Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "01d72695-c196-48ea-b82a-fcc013560fe7",
+              "name": "Response Type",
+              "value": "Just Curious",
+              "type": "string"
+            },
+            {
+              "id": "79aa42e8-37bc-4861-bc80-5d375e9b01a5",
+              "name": "Email Subject",
+              "value": "Learn More About the AI Career Accelerator",
+              "type": "string"
+            },
+            {
+              "id": "2e35ad67-5a79-499e-b7c3-0a2dff685fac",
+              "name": "Email Body",
+              "value": "Hi {{student name}}, thanks for your interest in learning more about the AI Career Accelerator. The program focuses on AI-powered portfolios, practical system-building skills, and internship and placement preparation.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        896,
+        240
+      ],
+      "id": "7fadbe8a-07e6-4591-b51f-61b8d4f3a1e9",
+      "name": "Prepare Just Curious Response"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_GOOGLE_SHEET_NAME"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 965307510,
+          "mode": "list",
+          "cachedResultName": "YOUR_SHEET_TAB"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{$json.Name}}",
+            "Email": "={{$json.Email}}",
+            "Category": "Highly Interested",
+            "Action Taken": "Highly Interested response prepared",
+            "Timestamp": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action Taken",
+              "displayName": "Action Taken",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1152,
+        -144
+      ],
+      "id": "5005fca5-11f9-475f-b0d0-4e0d09f5eacb",
+      "name": "Log Highly Interested Action"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_GOOGLE_SHEET_NAME"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 965307510,
+          "mode": "list",
+          "cachedResultName": "YOUR_SHEET_TAB"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{$json.Name}}",
+            "Email": "={{$json.Email}}",
+            "Category": "Exploring",
+            "Action Taken": "Exploring response prepared",
+            "Timestamp": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action Taken",
+              "displayName": "Action Taken",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1152,
+        48
+      ],
+      "id": "5643f5a1-ec8f-4239-ae76-cb1d454646ca",
+      "name": "Log Exploring Action"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_GOOGLE_SHEET_NAME"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 965307510,
+          "mode": "list",
+          "cachedResultName": "YOUR_SHEET_TAB"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{$json.Name}}",
+            "Email": "={{$json.Email}}",
+            "Timestamp": "={{$now}}",
+            "Action Taken": "Just Curious response prepared",
+            "Category": "Just Curious"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action Taken",
+              "displayName": "Action Taken",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1152,
+        240
+      ],
+      "id": "eda3ec76-9d97-4e16-9b36-da018a4c25c0",
+      "name": "Log Just Curious Action"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Student Lead": {
+      "main": [
+        [
+          {
+            "node": "Prepare Student Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Student Data": {
+      "main": [
+        [
+          {
+            "node": "Store Lead in Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Lead in Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Classify Lead Interest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Lead Interest": {
+      "main": [
+        [
+          {
+            "node": "Prepare Highly Interested Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Exploring Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Just Curious Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Highly Interested Response": {
+      "main": [
+        [
+          {
+            "node": "Log Highly Interested Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Exploring Response": {
+      "main": [
+        [
+          {
+            "node": "Log Exploring Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Just Curious Response": {
+      "main": [
+        [
+          {
+            "node": "Log Just Curious Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f46e1c0b-b2f9-48bd-b613-dfebaa1287e1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "tags": []
+}
